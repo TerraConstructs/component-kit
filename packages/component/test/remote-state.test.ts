@@ -244,47 +244,47 @@ describe('remoteState', () => {
       })
     })
 
-    it('ARC: dynamic map keys from a const input array', () => {
-      // production pattern (async-requests-common), without a separate interface
-      const snsRequestTopics = ['transcode', 'thumbnail'] as const
-      const arcFixedOutputs = z.object({
+    it('dynamic map keys from a const input array', () => {
+      // dynamic map keys from a const input array, without a separate interface
+      const requestTopics = ['transcode', 'thumbnail'] as const
+      const queueBaseOutputs = z.object({
         queueArn: z.string(),
         workerCount: z.number(),
       })
-      const arcStg1Outputs = z.object({
-        ...arcFixedOutputs.shape,
-        newJobRequestTopics: z.record(z.enum(snsRequestTopics), z.string()),
+      const jobQueueOutputs = z.object({
+        ...queueBaseOutputs.shape,
+        newJobRequestTopics: z.record(z.enum(requestTopics), z.string()),
       })
 
       const stack = newStack(
         foggComponentToConfig(
           withDefaults({
             component_backends: {
-              arc: { kind: 's3', s3: { bucket: 'b', key_path: 'arc' } },
+              jobs: { kind: 's3', s3: { bucket: 'b', key_path: 'jobs' } },
             },
           }),
           { forceRemoteStates: true },
         ),
       )
-      const arc = stack.remoteState('arc', arcStg1Outputs)
-      expectTypeOf(arc.queueArn).toEqualTypeOf<string>()
-      expectTypeOf(arc.newJobRequestTopics.lookup)
+      const jobs = stack.remoteState('jobs', jobQueueOutputs)
+      expectTypeOf(jobs.queueArn).toEqualTypeOf<string>()
+      expectTypeOf(jobs.newJobRequestTopics.lookup)
         .parameter(0)
         .toEqualTypeOf<'transcode' | 'thumbnail'>()
       // @ts-expect-error not one of the declared topics
-      arc.newJobRequestTopics.lookup('nope')
-      for (const topic of snsRequestTopics) {
-        addOutput(stack, topic, arc.newJobRequestTopics.lookup(topic))
+      jobs.newJobRequestTopics.lookup('nope')
+      for (const topic of requestTopics) {
+        addOutput(stack, topic, jobs.newJobRequestTopics.lookup(topic))
       }
       Template.fromStack(stack).toMatchObject({
         output: {
           transcode: {
             value:
-              '${data.terraform_remote_state.arc.outputs.newJobRequestTopics.transcode}',
+              '${data.terraform_remote_state.jobs.outputs.newJobRequestTopics.transcode}',
           },
           thumbnail: {
             value:
-              '${data.terraform_remote_state.arc.outputs.newJobRequestTopics.thumbnail}',
+              '${data.terraform_remote_state.jobs.outputs.newJobRequestTopics.thumbnail}',
           },
         },
       })
