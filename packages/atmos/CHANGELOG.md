@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.2.0](https://github.com/TerraConstructs/component-kit/compare/atmos-v0.1.0...atmos-v0.2.0) (2026-11-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* `stack.config` is now `stack.componentConfig`, `stack.component` is now `stack.componentWiring`, and IComponentWiring.config is IComponentWiring.componentConfig (ComponentWiring keeps `config` and adds the `componentConfig` alias).
+
+### Features
+
+* keep stack wiring private behind componentConfig/componentWiring ([#4](https://github.com/TerraConstructs/component-kit/issues/4)) ([ccac552](https://github.com/TerraConstructs/component-kit/commit/ccac55296b6732b983061a44efe164aa09027675))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @tcons/component bumped to 0.2.0
+
 ## 0.1.0 (2026-11-25)
 
 
