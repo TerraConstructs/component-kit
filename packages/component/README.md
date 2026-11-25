@@ -127,15 +127,15 @@ Without a schema every property is a `getString` token
 Map keys from a const array, with no separate interface:
 
 ```ts
-const snsRequestTopics = ['transcode', 'thumbnail'] as const
-const arcFixedOutputs = z.object({ queueArn: z.string() })
-export const arcStg1Outputs = z.object({
-  ...arcFixedOutputs.shape,
-  newJobRequestTopics: z.record(z.enum(snsRequestTopics), z.string()),
+const requestTopics = ['transcode', 'thumbnail'] as const
+const queueBaseOutputs = z.object({ queueArn: z.string() })
+export const jobQueueOutputs = z.object({
+  ...queueBaseOutputs.shape,
+  newJobRequestTopics: z.record(z.enum(requestTopics), z.string()),
 })
 
-const arc = stack.remoteState('arc', arcStg1Outputs)
-arc.newJobRequestTopics.lookup('transcode') // typed: 'transcode' | 'thumbnail'
+const jobs = stack.remoteState('jobs', jobQueueOutputs)
+jobs.newJobRequestTopics.lookup('transcode') // typed: 'transcode' | 'thumbnail'
 ```
 
 Optional/nullable/default/readonly/pipe/lazy wrappers are looked through;
