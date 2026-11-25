@@ -13,7 +13,14 @@ import {
 import { addBackend, addRemoteState } from './backend'
 import type { ComponentConfig } from './config'
 import { addCloudflareProvider, addDatadogProvider } from './providers'
-import { type RemoteStateOptions, remoteStateProxy } from './remote-state'
+import {
+  type IRemoteStateAccess,
+  type LegacyRemoteStateSchema,
+  type RemoteStateOutputs,
+  type RemoteStateSchema,
+  remoteStateProxy,
+} from './remote-state'
+import type { StringifiedRecord } from './util/types'
 
 export interface ComponentWiringOptions extends ComponentTagOptions {
   /**
@@ -29,7 +36,7 @@ export interface ComponentWiringOptions extends ComponentTagOptions {
 /**
  * The public surface shared by every component stack flavour.
  */
-export interface IComponentWiring {
+export interface IComponentWiring extends IRemoteStateAccess {
   /** The resolved, tool-neutral component configuration. */
   readonly config: ComponentConfig
   /** Module name to TerraformHclModule. */
@@ -181,8 +188,16 @@ export class ComponentWiring implements IComponentWiring {
     return data
   }
 
-  public remoteState<T>(name: string, options?: RemoteStateOptions): any {
-    return remoteStateProxy<T>(this.remoteStateData(name), options)
+  public remoteState<T = Record<string, string>>(
+    name: string,
+  ): StringifiedRecord<T>
+  public remoteState<T>(name: string, schema: LegacyRemoteStateSchema<T>): T
+  public remoteState<S extends RemoteStateSchema>(
+    name: string,
+    schema: S,
+  ): RemoteStateOutputs<S>
+  public remoteState(name: string, schema?: RemoteStateSchema): unknown {
+    return remoteStateProxy(this.remoteStateData(name), schema)
   }
 
   public setMainModuleVariables(variables: Record<string, any>): void {

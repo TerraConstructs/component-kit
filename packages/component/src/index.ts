@@ -19,3 +19,14 @@ export {
 } from './wiring'
 export { ComponentStack, type ComponentStackProps } from './component-stack'
 export type { StringifiedRecord } from './util/types'
+export {
+  type IRemoteStateAccess,
+  type LegacyRemoteStateSchema,
+  type ListOutput,
+  type MapOutput,
+  outputKind,
+  type RemoteOutput,
+  type RemoteStateOutputs,
+  type RemoteStateSchema,
+  remoteStateProxy,
+} from './remote-state'
