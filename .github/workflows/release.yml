@@ -11,8 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   release-please:
@@ -20,10 +19,20 @@ jobs:
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
+      # The org forbids GITHUB_TOKEN from creating pull requests. The tcons-release-bot app
+      # token is a separate identity, and its release PR also triggers the ci checks.
+      - name: Mint tcons-release-bot token
+        id: app-token
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/create-github-app-token@v3.4.0 # client-id input (app-id deprecated)
+        with:
+          client-id: ${{ vars.TCONS_RELEASE_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.TCONS_RELEASE_BOT_PRIVATE_KEY }}
       - id: release
         if: ${{ github.event_name == 'push' }}
         uses: googleapis/release-please-action@v5.0.0
         with:
+          token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
