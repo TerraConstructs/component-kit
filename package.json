@@ -1,0 +1,32 @@
+{
+  "name": "component-kit",
+  "private": true,
+  "description": "Tool-agnostic component wiring for cdk-terrain (cdktn) and TerraConstructs stacks",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TerraConstructs/component-kit.git"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "eslint": "9.39.5",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.10.1",
+    "turbo": "2.11.13",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.74.0"
+  },
+  "packageManager": "pnpm@11.24.0",
+  "engines": {
+    "node": ">=22.23.4"
+  }
+}

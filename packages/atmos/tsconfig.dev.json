@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "Preserve",
+    "moduleResolution": "Bundler"
+  },
+  "include": ["src/**/*", "test/**/*", "vitest.config.mts", "vitest.setup.mts"]
+}

@@ -1,0 +1,6 @@
+packages:
+  - 'packages/*'
+
+# Native deps whose install scripts may run (pnpm blocks build scripts by default).
+allowBuilds:
+  esbuild: true
