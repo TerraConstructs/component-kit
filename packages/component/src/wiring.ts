@@ -37,8 +37,13 @@ export interface ComponentWiringOptions extends ComponentTagOptions {
  * The public surface shared by every component stack flavour.
  */
 export interface IComponentWiring extends IRemoteStateAccess {
-  /** The resolved, tool-neutral component configuration. */
-  readonly config: ComponentConfig
+  /**
+   * The resolved, tool-neutral component configuration.
+   *
+   * Named `componentConfig` (not `config`) so stack subclasses can declare their
+   * own `config` without shadowing it.
+   */
+  readonly componentConfig: ComponentConfig
   /** Module name to TerraformHclModule. */
   readonly modules: Record<string, TerraformHclModule>
   /** Local name to TerraformLocal. */
@@ -69,6 +74,11 @@ export interface IComponentWiring extends IRemoteStateAccess {
  */
 export class ComponentWiring implements IComponentWiring {
   public readonly config: ComponentConfig
+
+  /** {@link IComponentWiring.componentConfig}; same object as {@link config}. */
+  public get componentConfig(): ComponentConfig {
+    return this.config
+  }
   public readonly modules: Record<string, TerraformHclModule> = {}
   public readonly locals: Record<string, TerraformLocal> = {}
   private readonly _providers: Record<string, awsProvider.AwsProvider> = {}

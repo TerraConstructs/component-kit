@@ -32,42 +32,51 @@ export type ComponentStackProps = ComponentConfigInput & ComponentTagOptions
  * ```
  */
 export class ComponentStack extends TerraformStack implements IComponentWiring {
-  /** The wiring unit (registry of providers, remote states, modules, locals). */
-  public readonly component: ComponentWiring
+  /**
+   * The wiring lives in an ES private field: a subclass declaring a field with
+   * any public name (`config`, `component`, ...) cannot shadow it and silently
+   * break the delegated methods below.
+   */
+  readonly #wiring: ComponentWiring
 
   constructor(scope: Construct, id: string, props: ComponentStackProps) {
     super(scope, id)
     const config = resolveComponentConfig(props)
-    this.component = new ComponentWiring(this, config, {
+    this.#wiring = new ComponentWiring(this, config, {
       defaultTags: props.defaultTags,
       ignoreTags: props.ignoreTags,
     })
   }
 
-  public get config(): ComponentConfig {
-    return this.component.config
+  /** The wiring unit (registry of providers, remote states, modules, locals). */
+  public get componentWiring(): ComponentWiring {
+    return this.#wiring
+  }
+
+  public get componentConfig(): ComponentConfig {
+    return this.#wiring.config
   }
 
   public get modules(): Record<string, TerraformHclModule> {
-    return this.component.modules
+    return this.#wiring.modules
   }
 
   public get locals(): Record<string, TerraformLocal> {
-    return this.component.locals
+    return this.#wiring.locals
   }
 
   /** The default AWS provider region, if configured. */
   public get region(): string | undefined {
-    return this.component.region
+    return this.#wiring.region
   }
 
   public get defaultAwsProvider(): awsProvider.AwsProvider {
-    return this.component.defaultAwsProvider
+    return this.#wiring.defaultAwsProvider
   }
 
   /** An AWS provider by alias (`DefaultAwsProvider` for the default one). */
   public awsProvider(alias: string): awsProvider.AwsProvider {
-    return this.component.awsProvider(alias)
+    return this.#wiring.awsProvider(alias)
   }
 
   public remoteState<T = Record<string, string>>(
@@ -79,21 +88,21 @@ export class ComponentStack extends TerraformStack implements IComponentWiring {
     schema: S,
   ): RemoteStateOutputs<S>
   public remoteState(name: string, schema?: RemoteStateSchema): unknown {
-    return this.component.remoteState(name, schema as any)
+    return this.#wiring.remoteState(name, schema as any)
   }
 
   public setMainModuleVariables(variables: Record<string, any>): void {
-    this.component.setMainModuleVariables(variables)
+    this.#wiring.setMainModuleVariables(variables)
   }
 
   public setModuleVariables(
     name: string,
     variables: Record<string, any>,
   ): void {
-    this.component.setModuleVariables(name, variables)
+    this.#wiring.setModuleVariables(name, variables)
   }
 
   public getLocal(name: string): TerraformLocal {
-    return this.component.getLocal(name)
+    return this.#wiring.getLocal(name)
   }
 }
