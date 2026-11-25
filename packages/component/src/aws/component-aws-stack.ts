@@ -11,6 +11,11 @@ import {
   type ComponentConfigInput,
   resolveComponentConfig,
 } from '../config'
+import type {
+  LegacyRemoteStateSchema,
+  RemoteStateOutputs,
+  RemoteStateSchema,
+} from '../remote-state'
 import type { StringifiedRecord } from '../util/types'
 import { ComponentWiring, type IComponentWiring } from '../wiring'
 
@@ -92,16 +97,16 @@ export class ComponentAwsStack extends AwsStack implements IComponentWiring {
     return this.provider
   }
 
-  /**
-   * Access the outputs of a declared dependency. Without schema every
-   * property is a string token (`getString`).
-   *
-   * @throws if `name` is not a declared dependency
-   */
   public remoteState<T = Record<string, string>>(
     name: string,
-  ): StringifiedRecord<T> {
-    return this.component.remoteState(name)
+  ): StringifiedRecord<T>
+  public remoteState<T>(name: string, schema: LegacyRemoteStateSchema<T>): T
+  public remoteState<S extends RemoteStateSchema>(
+    name: string,
+    schema: S,
+  ): RemoteStateOutputs<S>
+  public remoteState(name: string, schema?: RemoteStateSchema): unknown {
+    return this.component.remoteState(name, schema as any)
   }
 
   public setMainModuleVariables(variables: Record<string, any>): void {
