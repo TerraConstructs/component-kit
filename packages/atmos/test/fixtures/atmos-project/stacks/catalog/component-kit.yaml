@@ -1,0 +1,24 @@
+# Writes .atmos-component.json for @tcons/atmos's AtmosFileSource
+# (`atmos terraform generate files <component> -s <stack>`).
+terraform:
+  generate:
+    .atmos-component.json: |
+      {
+        "atmos_component": {{ toJson .atmos_component }},
+        "atmos_stack": {{ toJson .atmos_stack }},
+        "workspace": {{ toJson .workspace }},
+        "vars": {{ toJson .vars }},
+        "settings": {{ toJson .settings }},
+        "backend_type": {{ toJson .backend_type }},
+        "backend": {{ toJson .backend }},
+        "providers": {{ toJson .providers }},
+        "dependency_backends": {
+        {{- range $i, $d := .dependencies.components }}{{ if $i }},{{ end }}
+          {{ $c := atmos.Component $d.component (or $d.stack $.atmos_stack) }}{{ toJson $d.component }}: {
+            "backend_type": {{ toJson (or $c.remote_state_backend_type $c.backend_type) }},
+            "backend": {{ toJson (or $c.remote_state_backend $c.backend) }},
+            "workspace": {{ toJson $c.workspace }}
+          }
+        {{- end }}
+        }
+      }

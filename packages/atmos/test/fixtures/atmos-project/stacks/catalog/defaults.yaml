@@ -1,0 +1,20 @@
+vars:
+  namespace: proj
+  tags:
+    owner: foo@example.com
+
+terraform:
+  backend_type: s3
+  backend:
+    s3:
+      bucket: buck
+      region: us-west-2
+      encrypt: true
+      assume_role:
+        role_arn: arn:aws:iam::123456789012:role/role
+  providers:
+    aws:
+      region: us-west-2
+      assume_role:
+        role_arn: arn:aws:iam::123456789012:role/role
+      default_tags: {}

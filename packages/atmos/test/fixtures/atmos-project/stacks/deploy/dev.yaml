@@ -1,0 +1,76 @@
+import:
+  - catalog/defaults
+  - catalog/component-kit
+
+vars:
+  stage: dev
+
+components:
+  terraform:
+    network:
+      backend:
+        s3:
+          key: terraform/proj/envs/dev/components/network.tfstate
+      vars:
+        name: network
+
+    db:
+      backend:
+        s3:
+          key: terraform/proj/envs/dev/components/db.tfstate
+      # dependents read db state with a read-only role
+      remote_state_backend:
+        s3:
+          assume_role:
+            role_arn: arn:aws:iam::123456789012:role/reader
+      vars:
+        name: db
+
+    app:
+      backend:
+        s3:
+          key: terraform/proj/envs/dev/components/app.tfstate
+      vars:
+        name: app
+        tags:
+          team: platform
+      providers:
+        aws:
+          default_tags:
+            tags:
+              tier: web
+          ignore_tags:
+            key_prefixes:
+              - kubernetes.io/
+        datadog: {}
+      dependencies:
+        components:
+          - component: network
+          - component: db
+      settings:
+        component_kit:
+          locals:
+            app_config: yamldecode(file("config.yaml"))
+          main_module:
+            source: terraform-aws-modules/lambda/aws
+            version: 7.0.0
+          modules:
+            - name: bucket
+              source: terraform-aws-modules/s3-bucket/aws
+              version: 4.1.0
+
+    # a component migrated from fogg: identity pinned through vars so the
+    # synthesized JSON equals what cdktf-fogg-helpers v5 produced
+    migrated:
+      backend:
+        s3:
+          key: terraform/proj/envs/test/components/migrated.tfstate
+      vars:
+        name: migrated
+        env: test
+        project: proj
+        owner: foo@example.com
+        tags: {}
+      dependencies:
+        components:
+          - component: network

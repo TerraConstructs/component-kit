@@ -32,12 +32,6 @@ importers:
 
   packages/atmos:
     dependencies:
-      '@cdktn/provider-cloudflare':
-        specifier: ^17.0.0
-        version: 17.0.1(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1)
-      '@cdktn/provider-datadog':
-        specifier: ^17.0.0
-        version: 17.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1)
       '@tcons/component':
         specifier: workspace:^
         version: link:../component
@@ -54,9 +48,15 @@ importers:
       '@cdktn/provider-aws':
         specifier: 26.0.1
         version: 26.0.1(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1)
+      '@cdktn/provider-cloudflare':
+        specifier: ^17.0.1
+        version: 17.0.1(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1)
       '@cdktn/provider-cloudinit':
         specifier: ^15.0.0
         version: 15.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1)
+      '@cdktn/provider-datadog':
+        specifier: ^17.0.0
+        version: 17.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1)
       '@cdktn/provider-docker':
         specifier: ^17.0.0
         version: 17.0.1(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1)
@@ -69,15 +69,24 @@ importers:
       '@cdktn/vitest':
         specifier: 0.1.0
         version: 0.1.0(cdktn@0.25.1(constructs@10.8.1))(vitest@4.1.12(@types/node@22.20.5)(vite@8.3.8(@types/node@22.20.5)))
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
       '@types/node':
         specifier: ^22.20.5
         version: 22.20.5
+      '@vincenthsh/cdktf-fogg-helpers':
+        specifier: 5.0.0
+        version: 5.0.0(@cdktn/provider-aws@26.0.1(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-cloudflare@17.0.1(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-datadog@17.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1)(terraconstructs@0.2.21(@aws-cdk/cloud-assembly-schema@54.26.0)(@aws-cdk/region-info@2.278.0)(@cdktn/provider-archive@15.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-aws@26.0.1(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-cloudinit@15.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-docker@17.0.1(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-time@15.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-tls@15.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))
       cdktn:
         specifier: 0.25.1
         version: 0.25.1(constructs@10.8.1)
       constructs:
         specifier: 10.8.1
         version: 10.8.1
+      js-yaml:
+        specifier: ^4.3.2
+        version: 4.3.2
       terraconstructs:
         specifier: 0.2.21
         version: 0.2.21(@aws-cdk/cloud-assembly-schema@54.26.0)(@aws-cdk/region-info@2.278.0)(@cdktn/provider-archive@15.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-aws@26.0.1(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-cloudinit@15.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-docker@17.0.1(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-time@15.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(@cdktn/provider-tls@15.0.0(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1))(cdktn@0.25.1(constructs@10.8.1))(constructs@10.8.1)
