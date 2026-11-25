@@ -1,0 +1,229 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`full .fogg-component.yaml fixture > synthesizes identically to v5 (forceRemoteStates=false) 1`] = `
+{
+  "locals": {
+    "foo_foo_foo": "\${yamldecode(file("../../../foo-fooFoo.yaml"))}",
+  },
+  "module": {
+    "vpc": {
+      "source": "terraform-aws-modules/vpc/aws",
+      "version": "5.12.0",
+    },
+  },
+  "provider": {
+    "aws": [
+      {
+        "assume_role": [
+          {
+            "role_arn": "arn:aws:iam::123456789012:role/role",
+          },
+        ],
+        "default_tags": [
+          {
+            "tags": {
+              "env": "test",
+              "managedBy": "terraform",
+              "owner": "foo@example.com",
+              "project": "proj",
+              "purpose": "parity",
+              "service": "network",
+              "tfstateKey": "terraform/proj/envs/test/components/network.tfstate",
+            },
+          },
+        ],
+        "ignore_tags": [
+          {
+            "key_prefixes": [
+              "kubernetes.io/",
+            ],
+          },
+        ],
+        "region": "us-west-2",
+      },
+      {
+        "alias": "shared_services",
+        "assume_role": [
+          {
+            "role_arn": "arn:aws:iam::210987654321:role/role",
+          },
+        ],
+        "default_tags": [
+          {
+            "tags": {
+              "env": "test",
+              "managedBy": "terraform",
+              "owner": "foo@example.com",
+              "project": "proj",
+              "purpose": "parity",
+              "service": "network",
+              "tfstateKey": "terraform/proj/envs/test/components/network.tfstate",
+            },
+          },
+        ],
+        "ignore_tags": [
+          {
+            "key_prefixes": [
+              "kubernetes.io/",
+            ],
+          },
+        ],
+        "region": "ap-southeast-1",
+      },
+    ],
+  },
+  "terraform": {
+    "backend": {
+      "s3": {
+        "assume_role": {
+          "role_arn": "arn:aws:iam::123456789012:role/role",
+        },
+        "bucket": "buck",
+        "encrypt": true,
+        "key": "terraform/proj/envs/test/components/network.tfstate",
+        "region": "us-west-2",
+      },
+    },
+    "required_providers": {
+      "aws": {
+        "source": "hashicorp/aws",
+        "version": "6.71.0",
+      },
+    },
+  },
+}
+`;
+
+exports[`full .fogg-component.yaml fixture > synthesizes identically to v5 (forceRemoteStates=true) 1`] = `
+{
+  "data": {
+    "terraform_remote_state": {
+      "app": {
+        "backend": "s3",
+        "config": {
+          "assume_role": {
+            "role_arn": "arn:aws:iam::123456789012:role/role",
+          },
+          "bucket": "buck",
+          "encrypt": true,
+          "key": "terraform/proj/envs/test/components/app.tfstate",
+          "region": "us-west-2",
+        },
+      },
+      "lambda": {
+        "backend": "s3",
+        "config": {
+          "assume_role": {
+            "role_arn": "arn:aws:iam::123456789012:role/role",
+          },
+          "bucket": "buck",
+          "encrypt": true,
+          "key": "terraform/proj/envs/test/components/lambda.tfstate",
+          "region": "us-west-2",
+        },
+      },
+      "network": {
+        "backend": "s3",
+        "config": {
+          "assume_role": {
+            "role_arn": "arn:aws:iam::123456789012:role/role",
+          },
+          "bucket": "buck",
+          "encrypt": true,
+          "key": "terraform/proj/envs/test/components/network.tfstate",
+          "region": "us-west-2",
+        },
+      },
+    },
+  },
+  "locals": {
+    "foo_foo_foo": "\${yamldecode(file("../../../foo-fooFoo.yaml"))}",
+  },
+  "module": {
+    "vpc": {
+      "source": "terraform-aws-modules/vpc/aws",
+      "version": "5.12.0",
+    },
+  },
+  "provider": {
+    "aws": [
+      {
+        "assume_role": [
+          {
+            "role_arn": "arn:aws:iam::123456789012:role/role",
+          },
+        ],
+        "default_tags": [
+          {
+            "tags": {
+              "env": "test",
+              "managedBy": "terraform",
+              "owner": "foo@example.com",
+              "project": "proj",
+              "purpose": "parity",
+              "service": "network",
+              "tfstateKey": "terraform/proj/envs/test/components/network.tfstate",
+            },
+          },
+        ],
+        "ignore_tags": [
+          {
+            "key_prefixes": [
+              "kubernetes.io/",
+            ],
+          },
+        ],
+        "region": "us-west-2",
+      },
+      {
+        "alias": "shared_services",
+        "assume_role": [
+          {
+            "role_arn": "arn:aws:iam::210987654321:role/role",
+          },
+        ],
+        "default_tags": [
+          {
+            "tags": {
+              "env": "test",
+              "managedBy": "terraform",
+              "owner": "foo@example.com",
+              "project": "proj",
+              "purpose": "parity",
+              "service": "network",
+              "tfstateKey": "terraform/proj/envs/test/components/network.tfstate",
+            },
+          },
+        ],
+        "ignore_tags": [
+          {
+            "key_prefixes": [
+              "kubernetes.io/",
+            ],
+          },
+        ],
+        "region": "ap-southeast-1",
+      },
+    ],
+  },
+  "terraform": {
+    "backend": {
+      "s3": {
+        "assume_role": {
+          "role_arn": "arn:aws:iam::123456789012:role/role",
+        },
+        "bucket": "buck",
+        "encrypt": true,
+        "key": "terraform/proj/envs/test/components/network.tfstate",
+        "region": "us-west-2",
+      },
+    },
+    "required_providers": {
+      "aws": {
+        "source": "hashicorp/aws",
+        "version": "6.71.0",
+      },
+    },
+  },
+}
+`;
