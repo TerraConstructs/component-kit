@@ -1,6 +1,6 @@
 {
   "name": "@tcons/atmos",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Atmos bridge for @tcons/component: source cdktn component configuration from `atmos describe component`",
   "license": "MIT",
   "repository": {
