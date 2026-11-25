@@ -1,0 +1,16 @@
+# Minimal Atmos project used by @tcons/atmos tests (no AWS access needed).
+base_path: "."
+components:
+  terraform:
+    base_path: "components/terraform"
+    # fogg-compatible state keys: no workspace prefixes in the state path
+    workspaces_enabled: false
+stacks:
+  base_path: "stacks"
+  included_paths:
+    - "deploy/**/*"
+  excluded_paths:
+    - "**/_defaults.yaml"
+  name_pattern: "{stage}"
+logs:
+  level: Warning
