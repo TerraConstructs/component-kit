@@ -16,6 +16,11 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-24.04
+    # Two pushes landing together (e.g. a release PR merge right after another commit) must not
+    # race: both runs try to create the same GitHub releases. Queue them; never cancel mid-run.
+    concurrency:
+      group: release-please
+      cancel-in-progress: false
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
