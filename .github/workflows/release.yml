@@ -1,0 +1,49 @@
+# release-please opens/updates the release PR; merging it tags each changed package and
+# publishes to npm with trusted publishing (OIDC). No NPM_TOKEN: each package's npm trusted
+# publisher is bound to TerraConstructs/component-kit + this file name (release.yml).
+name: release
+
+on:
+  push:
+    branches: [main]
+  # Manual publish for a release whose release-please run already happened
+  # (release_created is only true once). pnpm skips versions already on npm.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-24.04
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+    steps:
+      - id: release
+        if: ${{ github.event_name == 'push' }}
+        uses: googleapis/release-please-action@v5.0.0
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.releases_created == 'true' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-24.04
+    environment: npm-publish
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing + provenance
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.1.1
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo build test
+      - name: Publish (OIDC trusted publishing)
+        run: pnpm run ci:publish
