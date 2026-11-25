@@ -54,7 +54,12 @@ export function awsStackProviderConfig(
  * creates it lazily).
  */
 export class ComponentAwsStack extends AwsStack implements IComponentWiring {
-  public readonly component: ComponentWiring
+  /**
+   * The wiring lives in an ES private field: a subclass declaring a field with
+   * any public name (`config`, `component`, ...) cannot shadow it and silently
+   * break the delegated methods below.
+   */
+  readonly #wiring: ComponentWiring
 
   constructor(scope: Construct, id: string, props: ComponentAwsStackProps) {
     const config = resolveComponentConfig(props)
@@ -75,22 +80,27 @@ export class ComponentAwsStack extends AwsStack implements IComponentWiring {
 
     void this.provider
 
-    this.component = new ComponentWiring(this, config, {
+    this.#wiring = new ComponentWiring(this, config, {
       ...tagOptions,
       defaultAwsProvider: this.provider,
     })
   }
 
-  public get config(): ComponentConfig {
-    return this.component.config
+  /** The wiring unit (registry of providers, remote states, modules, locals). */
+  public get componentWiring(): ComponentWiring {
+    return this.#wiring
+  }
+
+  public get componentConfig(): ComponentConfig {
+    return this.#wiring.config
   }
 
   public get modules(): Record<string, TerraformHclModule> {
-    return this.component.modules
+    return this.#wiring.modules
   }
 
   public get locals(): Record<string, TerraformLocal> {
-    return this.component.locals
+    return this.#wiring.locals
   }
 
   public get defaultAwsProvider(): awsProvider.AwsProvider {
@@ -106,21 +116,21 @@ export class ComponentAwsStack extends AwsStack implements IComponentWiring {
     schema: S,
   ): RemoteStateOutputs<S>
   public remoteState(name: string, schema?: RemoteStateSchema): unknown {
-    return this.component.remoteState(name, schema as any)
+    return this.#wiring.remoteState(name, schema as any)
   }
 
   public setMainModuleVariables(variables: Record<string, any>): void {
-    this.component.setMainModuleVariables(variables)
+    this.#wiring.setMainModuleVariables(variables)
   }
 
   public setModuleVariables(
     name: string,
     variables: Record<string, any>,
   ): void {
-    this.component.setModuleVariables(name, variables)
+    this.#wiring.setModuleVariables(name, variables)
   }
 
   public getLocal(name: string): TerraformLocal {
-    return this.component.getLocal(name)
+    return this.#wiring.getLocal(name)
   }
 }

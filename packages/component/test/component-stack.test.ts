@@ -660,9 +660,9 @@ describe('ComponentStack (v5 FoggStack parity)', () => {
 
   it('exposes component configuration values', () => {
     const stack = parity(getDefaultComponentConfig())
-    expect(stack.config.identity.project).toBeDefined()
-    expect(stack.config.identity.owner).toBeDefined()
-    expect(stack.config.identity.env).toBeDefined()
+    expect(stack.componentConfig.identity.project).toBeDefined()
+    expect(stack.componentConfig.identity.owner).toBeDefined()
+    expect(stack.componentConfig.identity.env).toBeDefined()
   })
 
   it('parses bundled and generic provider configurations', () => {
@@ -730,12 +730,32 @@ describe('ComponentStack (v5 FoggStack parity)', () => {
       },
     })
     expect(loads).toBe(1)
-    expect(stack.config).toBe(config)
+    expect(stack.componentConfig).toBe(config)
   })
 
   it('requires config or source', () => {
     expect(() => new ComponentStack(app, 'MyStack', {} as any)).toThrow(
       /needs either `config`/,
+    )
+  })
+
+  it('keeps working when a subclass declares config/component fields', () => {
+    const config = foggComponentToConfig(getDefaultComponentConfig())
+    class AppStack extends ComponentStack {
+      // ES2022 class fields: before the wiring moved to a #private field these
+      // shadowed the stack's own members and broke every delegated method.
+      public readonly config = { app: 'settings' }
+      public readonly component = 'my-app'
+    }
+    const stack = new AppStack(app, 'MyStack', { config })
+    expect(stack.config).toEqual({ app: 'settings' })
+    expect(stack.component).toBe('my-app')
+    expect(stack.componentConfig).toBe(config)
+    expect(stack.defaultAwsProvider).toBe(
+      stack.componentWiring.defaultAwsProvider,
+    )
+    expect(() => stack.remoteState('not-declared')).toThrow(
+      /Remote state not-declared not found/,
     )
   })
 })

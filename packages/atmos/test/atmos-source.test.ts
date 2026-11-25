@@ -261,7 +261,7 @@ describe('resolveAtmosConfig', () => {
     const stack = new AtmosStack(Testing.app(), 'app', {
       atmos: { file: writeFile() },
     })
-    expect(stack.config.identity.name).toBe('app')
+    expect(stack.componentConfig.identity.name).toBe('app')
     expect(
       JSON.parse(Testing.synth(stack)).data.terraform_remote_state,
     ).toMatchObject({ network: { backend: 's3' } })

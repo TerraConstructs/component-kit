@@ -76,9 +76,12 @@ wiring.awsProvider('shared_services')
 wiring.getLocal('x')
 ```
 
-Stack API: `config`, `component` (the wiring), `modules`, `locals`, `region`,
+Stack API: `componentConfig`, `componentWiring`, `modules`, `locals`, `region`,
 `defaultAwsProvider`, `awsProvider(alias)`, `remoteState(...)`,
 `setMainModuleVariables()`, `setModuleVariables()`, `getLocal()`.
+
+The wiring is held in an ES `#private` field, so a subclass is free to declare
+its own `config`, `component` or other fields without breaking these methods.
 
 ## ComponentConfig
 
@@ -177,10 +180,10 @@ dependency names, local names, module names), backend and remote state
 config (`encrypt: true`, `assume_role { role_arn }`, profile precedence),
 provider `assume_role` lists, tag merging and ignore-tag union all match.
 
-One intentional difference: `MapOutput.lookup(key)` without a default
-renders `map.key` (as fogg HEAD, commit e00b179c), while the published 5.0.0
-renders `lookup(map, "key", "")`. Pass `''` explicitly to keep the old
-expression.
+`MapOutput.lookup(key)` without a default renders `map.key` (a missing key
+fails the plan), the same as `@vincenthsh/cdktf-fogg-helpers` 5.0.1
+([fogg #519](https://github.com/vincenthsh/fogg/pull/519)). Only 5.0.0 rendered
+`lookup(map, "key", "")`; pass `''` explicitly if you want that fallback.
 
 Unlike v5, Datadog and Cloudflare providers are optional peers loaded on
 demand, and v5's "module has no name" log line is not printed.

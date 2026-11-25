@@ -242,7 +242,7 @@ describe('ComponentAwsStack (v5 FoggTerraStack parity)', () => {
     )
     expect(stack.defaultAwsProvider).toBeDefined()
     expect(stack.defaultAwsProvider).toBe(stack.provider)
-    expect(stack.component.awsProvider('DefaultAwsProvider')).toBe(
+    expect(stack.componentWiring.awsProvider('DefaultAwsProvider')).toBe(
       stack.provider,
     )
   })
@@ -433,9 +433,9 @@ describe('ComponentAwsStack (v5 FoggTerraStack parity)', () => {
 
   it('exposes component configuration values', () => {
     const stack = parity(getDefaultComponentConfig())
-    expect(stack.config.identity.project).toBeDefined()
-    expect(stack.config.identity.owner).toBeDefined()
-    expect(stack.config.identity.env).toBeDefined()
+    expect(stack.componentConfig.identity.project).toBeDefined()
+    expect(stack.componentConfig.identity.owner).toBeDefined()
+    expect(stack.componentConfig.identity.env).toBeDefined()
   })
 
   it('parses bundled and generic provider configurations', () => {
